@@ -1,0 +1,215 @@
+<div class="container">
+    <!-- Header -->
+    <div class="header">
+        <h1>McDonald's Order Controller</h1>
+        <p class="subtitle">Automated cooking bot order management system</p>
+    </div>
+
+    <!-- Control Panel -->
+    <nz-card nzTitle="Control Panel" class="control-panel">
+        <div class="controls">
+            <button nz-button nzType="default" (click)="createNormalOrder()" class="control-btn">
+                <i nz-icon nzType="file-text" nzTheme="outline"></i>
+                <span class="btn-text">New Normal Order</span>
+            </button>
+
+            <button nz-button nzType="default" (click)="createVipOrder()" class="control-btn vip-button">
+                <i nz-icon nzType="crown" nzTheme="outline"></i>
+                <span class="btn-text">New VIP Order</span>
+            </button>
+
+            <button nz-button nzType="primary" (click)="addBot()" class="control-btn">
+                <i nz-icon nzType="plus" nzTheme="outline"></i>
+                <span class="btn-text">Bot</span>
+            </button>
+
+            <button nz-button nzType="default" nzDanger (click)="removeBot()" [disabled]="bots.length === 0"
+                class="control-btn">
+                <i nz-icon nzType="minus" nzTheme="outline"></i>
+                <span class="btn-text">Bot</span>
+            </button>
+        </div>
+    </nz-card>
+
+    <!-- Bot Management -->
+    <nz-card class="bot-management">
+        <div nz-card-head>
+            <div class="bot-title-section">
+                <div class="bot-title-main">
+                    <i nz-icon nzType="robot" nzTheme="outline" class="title-icon"></i>
+                    <span class="title-text">Cooking Robots</span>
+                </div>
+                <div class="bot-summary">
+                    <span class="summary-item">
+                        <i nz-icon nzType="check-circle" nzTheme="outline"></i>
+                        Active: {{getActiveBots()}}
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="bots.length === 0" class="empty-state">
+            <i nz-icon nzType="robot" nzTheme="outline" class="empty-icon"></i>
+            <p>No cooking robots deployed</p>
+            <small>Add robots to start processing orders</small>
+        </div>
+
+        <div *ngIf="bots.length > 0" class="bots-grid">
+            <div *ngFor="let bot of bots; trackBy: trackBotById" class="bot-card"
+                [ngClass]="'bot-' + bot.status.toLowerCase()">
+                <div class="bot-header">
+                    <div class="bot-info">
+                        <span class="bot-name">
+                            <i nz-icon [nzType]="getBotIcon(bot.status)" nzTheme="outline"></i>
+                            Robot {{bot.id}}
+                        </span>
+                        <small class="bot-id">#{{formatBotId(bot.id)}}</small>
+                    </div>
+                    <nz-tag [nzColor]="getBotStatusColor(bot.status)" class="bot-status-tag">
+                        {{getBotStatusText(bot.status)}}
+                    </nz-tag>
+                </div>
+
+                <div class="bot-body">
+                    <div *ngIf="bot.currentOrderId" class="bot-current-order">
+                        <i nz-icon nzType="clock-circle" nzTheme="outline"></i>
+                        <span>Processing Order #{{bot.currentOrderId}}</span>
+                    </div>
+
+                    <div *ngIf="bot.status === BotStatus.IDLE" class="bot-ready">
+                        <i nz-icon nzType="check-circle" nzTheme="outline"></i>
+                        <span>Idle - Ready for orders</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nz-card>
+
+    <!-- Order Areas -->
+    <div class="orders-section">
+        <!-- Pending Orders -->
+        <nz-card [nzTitle]="'Pending Orders (' + (pendingOrders.length + processingOrders.length) + ')'"
+            class="orders-card">
+            <div *ngIf="pendingOrders.length === 0 && processingOrders.length === 0" class="empty-state">
+                <i nz-icon nzType="hourglass" nzTheme="outline" class="empty-icon"></i>
+                <p>No pending orders</p>
+            </div>
+
+            <div *ngIf="pendingOrders.length > 0 || processingOrders.length > 0" class="orders-list">
+                <!-- Processing Orders -->
+                <div *ngFor="let order of processingOrders; trackBy: trackOrderById" class="order-card processing">
+                    <div class="order-content">
+                        <div class="order-info">
+                            <div class="order-header">
+                                <div class="order-id-section">
+                                    <i nz-icon nzType="file-text" nzTheme="outline" class="order-icon"></i>
+                                    <span class="order-id">Order #{{order.id}}</span>
+                                </div>
+                                <div class="order-tags">
+                                    <nz-tag [nzColor]="getOrderTypeColor(order.type)" class="order-type-tag">
+                                        <i nz-icon [nzType]="order.type === OrderType.VIP ? 'crown' : 'user'"
+                                            nzTheme="outline"></i>
+                                        {{order.type}}
+                                    </nz-tag>
+                                    <nz-tag nzColor="processing" class="order-status-tag">
+                                        <i nz-icon nzType="loading" nzTheme="outline" nzSpin></i>
+                                        PROCESSING
+                                    </nz-tag>
+                                </div>
+                            </div>
+                            <div class="order-details">
+                                <p class="order-time">
+                                    <i nz-icon nzType="clock-circle" nzTheme="outline"></i>
+                                    <span>Created: {{order.createdAt | date:'mediumTime'}}</span>
+                                </p>
+                                <p *ngIf="order.processingBotId" class="order-bot">
+                                    <i nz-icon nzType="robot" nzTheme="outline"></i>
+                                    <span>Assigned to Robot #{{order.processingBotId}}</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pending Orders -->
+                <div *ngFor="let order of pendingOrders; trackBy: trackOrderById" class="order-card pending">
+                    <div class="order-content">
+                        <div class="order-info">
+                            <div class="order-header">
+                                <div class="order-id-section">
+                                    <i nz-icon nzType="file-text" nzTheme="outline" class="order-icon"></i>
+                                    <span class="order-id">Order #{{order.id}}</span>
+                                </div>
+                                <div class="order-tags">
+                                    <nz-tag [nzColor]="getOrderTypeColor(order.type)" class="order-type-tag">
+                                        <i nz-icon [nzType]="order.type === OrderType.VIP ? 'crown' : 'user'"
+                                            nzTheme="outline"></i>
+                                        {{order.type}}
+                                    </nz-tag>
+                                    <nz-tag nzColor="default" class="order-status-tag">
+                                        <i nz-icon nzType="hourglass" nzTheme="outline"></i>
+                                        PENDING
+                                    </nz-tag>
+                                </div>
+                            </div>
+                            <div class="order-details">
+                                <p class="order-time">
+                                    <i nz-icon nzType="clock-circle" nzTheme="outline"></i>
+                                    <span>Created: {{order.createdAt | date:'mediumTime'}}</span>
+                                </p>
+                                <p class="order-waiting">
+                                    <i nz-icon nzType="team" nzTheme="outline"></i>
+                                    <span>Waiting for available robot...</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nz-card>
+
+        <!-- Completed Orders -->
+        <nz-card [nzTitle]="'Complete Orders (' + completedOrders.length + ')'" class="orders-card">
+            <div *ngIf="completedOrders.length === 0" class="empty-state">
+                <i nz-icon nzType="check-circle" nzTheme="outline" class="empty-icon"></i>
+                <p>No completed orders</p>
+            </div>
+
+            <div *ngIf="completedOrders.length > 0" class="orders-list">
+                <div *ngFor="let order of completedOrders; trackBy: trackOrderById" class="order-card completed">
+                    <div class="order-content">
+                        <div class="order-info">
+                            <div class="order-header">
+                                <div class="order-id-section">
+                                    <i nz-icon nzType="file-text" nzTheme="outline" class="order-icon"></i>
+                                    <span class="order-id">Order #{{order.id}}</span>
+                                </div>
+                                <div class="order-tags">
+                                    <nz-tag [nzColor]="getOrderTypeColor(order.type)" class="order-type-tag">
+                                        <i nz-icon [nzType]="order.type === OrderType.VIP ? 'crown' : 'user'"
+                                            nzTheme="outline"></i>
+                                        {{order.type}}
+                                    </nz-tag>
+                                    <nz-tag nzColor="success" class="order-status-tag">
+                                        <i nz-icon nzType="check-circle" nzTheme="outline"></i>
+                                        COMPLETE
+                                    </nz-tag>
+                                </div>
+                            </div>
+                            <div class="order-details">
+                                <p class="order-time">
+                                    <i nz-icon nzType="clock-circle" nzTheme="outline"></i>
+                                    <span>Completed: {{order.createdAt | date:'mediumTime'}}</span>
+                                </p>
+                                <p class="order-success">
+                                    <i nz-icon nzType="check" nzTheme="outline"></i>
+                                    <span>Ready for pickup</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nz-card>
+    </div>
+</div>

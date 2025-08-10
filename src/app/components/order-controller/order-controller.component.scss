@@ -1,0 +1,759 @@
+// SCSS variables
+$primary-color: #3b82f6;
+$primary-hover: #2563eb;
+$danger-color: #ef4444;
+$danger-hover: #dc2626;
+$success-color: #10b981;
+$warning-color: #f59e0b;
+$warning-hover: #d97706;
+
+$gray-50: #f9fafb;
+$gray-100: #f3f4f6;
+$gray-200: #e5e7eb;
+$gray-400: #9ca3af;
+$gray-500: #6b7280;
+$gray-800: #1f2937;
+
+$border-radius-sm: 6px;
+$border-radius: 8px;
+$border-radius-lg: 12px;
+
+$spacing-xs: 4px;
+$spacing-sm: 6px;
+$spacing: 8px;
+$spacing-md: 12px;
+$spacing-lg: 16px;
+$spacing-xl: 20px;
+$spacing-2xl: 24px;
+
+$font-size-xs: 0.75rem;
+$font-size-sm: 0.875rem;
+$font-size-base: 1rem;
+$font-size-lg: 1.125rem;
+$font-size-2xl: 1.5rem;
+$font-size-3xl: 1.875rem;
+$font-size-4xl: 2.25rem;
+
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+
+$line-height-tight: 1.2;
+
+$shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+$transition-base: all 0.2s ease;
+
+// Mixins
+@mixin flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@mixin flex-between {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+@mixin card-base {
+    border: 1px solid $gray-200;
+    border-radius: $border-radius;
+    transition: $transition-base;
+}
+
+@mixin button-base {
+    height: 40px;
+    border-radius: $border-radius;
+    font-weight: $font-weight-medium;
+    @include flex-center;
+    gap: $spacing-sm;
+}
+
+@mixin tablet-up {
+    @media (min-width: 640px) {
+        @content;
+    }
+}
+
+@mixin desktop-up {
+    @media (min-width: 1024px) {
+        @content;
+    }
+}
+
+@mixin large-desktop-up {
+    @media (min-width: 1280px) {
+        @content;
+    }
+}
+
+// Main styles
+.container {
+    padding: $spacing-lg;
+    max-width: 100%;
+    margin: 0 auto;
+
+    @include tablet-up {
+        padding: $spacing-xl;
+    }
+
+    @include desktop-up {
+        max-width: 1200px;
+        padding: $spacing-2xl;
+    }
+}
+
+// Header Section
+.header {
+    text-align: center;
+    margin-bottom: $spacing-xl;
+
+    h1 {
+        font-size: $font-size-2xl;
+        font-weight: $font-weight-semibold;
+        margin-bottom: $spacing;
+        color: $gray-800;
+        line-height: $line-height-tight;
+
+        @include tablet-up {
+            font-size: $font-size-3xl;
+        }
+
+        @include desktop-up {
+            font-size: $font-size-4xl;
+        }
+    }
+
+    .subtitle {
+        color: $gray-500;
+        font-size: $font-size-sm;
+
+        @include tablet-up {
+            font-size: $font-size-base;
+        }
+    }
+}
+
+// Control Panel
+.control-panel {
+    margin-bottom: $spacing-xl;
+}
+
+.controls {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $spacing-md;
+
+    @include tablet-up {
+        grid-template-columns: repeat(2, 1fr);
+        max-width: 400px;
+        margin: 0 auto;
+    }
+
+    @include desktop-up {
+        grid-template-columns: repeat(4, 1fr);
+        max-width: 600px;
+    }
+}
+
+.control-btn {
+    width: 100%;
+    height: 48px;
+    font-size: $font-size-xs;
+    border-radius: $border-radius;
+    @include flex-center;
+    gap: $spacing-sm;
+    padding: 0 $spacing-sm;
+
+    @include tablet-up {
+        height: 52px;
+        font-size: $font-size-sm;
+        gap: $spacing;
+    }
+
+    @include desktop-up {
+        font-size: $font-size-base;
+        padding: 0 $spacing-lg;
+    }
+
+    .btn-text {
+        font-size: $font-size-xs;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        color: inherit;
+        font-weight: $font-weight-medium;
+
+        @include tablet-up {
+            font-size: $font-size-sm;
+        }
+
+        @include desktop-up {
+            font-size: $font-size-base;
+        }
+    }
+
+    &.vip-button {
+        background-color: #fef3c7;
+        border-color: $warning-color;
+        color: #92400e;
+
+        &:hover {
+            background-color: #fde68a;
+            border-color: $warning-hover;
+            color: #92400e;
+        }
+
+        .btn-text {
+            color: #92400e !important;
+            font-weight: $font-weight-semibold;
+        }
+
+        &:hover .btn-text {
+            color: #92400e !important;
+        }
+    }
+}
+
+// Bot Status Section
+.bot-management {
+    margin-bottom: $spacing-xl;
+
+    .bot-title-section {
+        .bot-title-main {
+            @include flex-center;
+            justify-content: flex-start;
+            gap: $spacing-sm;
+            margin-bottom: $spacing-xs;
+
+            .title-icon {
+                font-size: $font-size-lg;
+                color: $primary-color;
+            }
+
+            .title-text {
+                font-size: $font-size-lg;
+                font-weight: $font-weight-semibold;
+                color: $gray-800;
+            }
+
+            .count-badge {
+                background-color: $success-color;
+                color: white;
+                padding: 2px $spacing-sm;
+                border-radius: $border-radius-sm;
+                font-size: $font-size-xs;
+                font-weight: $font-weight-medium;
+            }
+        }
+
+        .bot-summary {
+            display: flex;
+            gap: $spacing-lg;
+            margin-top: $spacing-xs;
+
+            .summary-item {
+                @include flex-center;
+                gap: $spacing-xs;
+                font-size: $font-size-sm;
+                color: $gray-500;
+
+                &.error {
+                    color: $danger-color;
+                }
+
+                i {
+                    font-size: $font-size-sm;
+                }
+            }
+        }
+    }
+}
+
+.empty-state {
+    color: $gray-400;
+    text-align: center;
+    padding: $spacing-xl;
+    font-size: $font-size-sm;
+    @include flex-center;
+    flex-direction: column;
+
+    .empty-icon {
+        font-size: $font-size-2xl;
+        margin-bottom: $spacing;
+        opacity: 0.5;
+        display: block;
+    }
+
+    p {
+        margin: 0;
+    }
+
+    small {
+        color: $gray-400;
+        font-size: $font-size-xs;
+        margin-top: $spacing-xs;
+        display: block;
+    }
+}
+
+.bots-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $spacing-lg;
+
+    @include tablet-up {
+        grid-template-columns: repeat(2, 1fr);
+        gap: $spacing-lg;
+    }
+
+    @include desktop-up {
+        grid-template-columns: repeat(3, 1fr);
+        gap: $spacing-xl;
+    }
+
+    @include large-desktop-up {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+.bot-card {
+    padding: $spacing-lg;
+    @include card-base;
+    background-color: $gray-50;
+    margin-bottom: 0;
+    position: relative;
+    overflow: hidden;
+
+    @include desktop-up {
+        padding: $spacing-xl;
+    }
+
+    // Status-based styling
+    &.bot-idle {
+        border-left: 4px solid $success-color;
+        background-color: #f6ffed;
+    }
+
+    &.bot-processing {
+        border-left: 4px solid $primary-color;
+        background-color: #e6f7ff;
+
+        &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, $primary-color, transparent);
+            animation: processing 2s infinite;
+        }
+    }
+
+    .bot-header {
+        @include flex-between;
+        margin-bottom: $spacing;
+
+        .bot-info {
+            .bot-name {
+                @include flex-center;
+                gap: $spacing-xs;
+                font-weight: $font-weight-medium;
+                font-size: $font-size-sm;
+                color: $gray-800;
+
+                i {
+                    font-size: $font-size-base;
+                }
+            }
+
+            .bot-id {
+                font-size: $font-size-xs;
+                color: $gray-400;
+                margin-top: 2px;
+                display: block;
+            }
+        }
+
+        .bot-status-tag {
+            font-size: $font-size-xs;
+            @include flex-center;
+            gap: $spacing-xs;
+        }
+    }
+
+    .bot-body {
+        margin-bottom: $spacing;
+
+        .bot-current-order,
+        .bot-ready {
+            @include flex-center;
+            justify-content: flex-start;
+            gap: $spacing-xs;
+            font-size: $font-size-xs;
+            padding: $spacing-xs $spacing-sm;
+            border-radius: $border-radius-sm;
+            margin-top: $spacing-xs;
+        }
+
+        .bot-current-order {
+            background-color: rgba($primary-color, 0.1);
+            color: $primary-color;
+        }
+
+        .bot-ready {
+            background-color: rgba($success-color, 0.1);
+            color: $success-color;
+        }
+    }
+}
+
+// Orders Section
+.orders-section {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xl;
+
+    @include tablet-up {
+        flex-direction: row;
+        gap: $spacing-2xl;
+    }
+
+    .orders-card {
+        @include tablet-up {
+            flex: 1;
+            min-width: 0;
+        }
+    }
+}
+
+.orders-list {
+    max-height: 400px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+
+    @include tablet-up {
+        max-height: 500px;
+    }
+
+    @include desktop-up {
+        max-height: 600px;
+    }
+
+    &::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 4px;
+
+        &:hover {
+            background: rgba(0, 0, 0, 0.4);
+        }
+    }
+}
+
+.order-card {
+    padding: $spacing-lg;
+    @include card-base;
+    margin-bottom: $spacing-lg;
+    position: relative;
+    overflow: hidden;
+
+    @include desktop-up {
+        padding: $spacing-xl;
+    }
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+
+    &.pending {
+        background-color: #fff;
+        border-left: 4px solid $gray-400;
+
+        &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, $gray-400, transparent);
+            animation: waiting 3s infinite;
+        }
+    }
+
+    &.processing {
+        background-color: #e6f7ff;
+        border-left: 4px solid $primary-color;
+
+        &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, $primary-color, transparent);
+            animation: processing 1.5s infinite;
+        }
+    }
+
+    &.completed {
+        background-color: #f6ffed;
+        border-left: 4px solid $success-color;
+
+        &::after {
+            content: '✓';
+            position: absolute;
+            top: $spacing-sm;
+            right: $spacing-sm;
+            width: 24px;
+            height: 24px;
+            background-color: $success-color;
+            color: white;
+            border-radius: 50%;
+            @include flex-center;
+            font-size: $font-size-xs;
+            font-weight: $font-weight-semibold;
+        }
+    }
+}
+
+.order-content {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing;
+
+    @include tablet-up {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+}
+
+.order-info {
+    flex: 1;
+}
+
+.order-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: $spacing-sm;
+    margin-bottom: $spacing-sm;
+
+    .order-id-section {
+        @include flex-center;
+        gap: $spacing-sm;
+
+        .order-icon {
+            font-size: $font-size-base;
+            color: $primary-color;
+        }
+
+        .order-id {
+            font-weight: $font-weight-semibold;
+            font-size: $font-size-base;
+            color: $gray-800;
+        }
+    }
+
+    .order-tags {
+        display: flex;
+        gap: $spacing-xs;
+        flex-wrap: wrap;
+
+        .order-type-tag,
+        .order-status-tag {
+            font-size: $font-size-xs;
+            margin: 0;
+            @include flex-center;
+            gap: $spacing-xs;
+
+            i {
+                font-size: $font-size-xs;
+            }
+        }
+    }
+}
+
+.order-details {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xs;
+
+    .order-time,
+    .order-bot,
+    .order-waiting,
+    .order-success {
+        font-size: $font-size-xs;
+        color: $gray-500;
+        margin: 0;
+        @include flex-center;
+        justify-content: flex-start;
+        gap: $spacing-xs;
+        padding: $spacing-xs 0;
+
+        span {
+            font-weight: $font-weight-medium;
+        }
+    }
+
+    .order-success {
+        color: $success-color;
+    }
+}
+
+// Ant Design overrides
+:host ::ng-deep {
+    .ant-card {
+        border-radius: $border-radius-lg;
+        box-shadow: $shadow-sm;
+        margin-bottom: $spacing-xl;
+
+        .ant-card-head {
+            padding: $spacing-lg $spacing-lg;
+            border-bottom: 1px solid $gray-100;
+
+            @include tablet-up {
+                padding: $spacing-lg $spacing-xl;
+            }
+
+            @include desktop-up {
+                padding: $spacing-xl $spacing-xl;
+            }
+
+            .ant-card-head-title {
+                font-size: $font-size-base;
+                font-weight: $font-weight-semibold;
+                color: $gray-800;
+
+                @include tablet-up {
+                    font-size: $font-size-lg;
+                }
+            }
+        }
+
+        .ant-card-body {
+            padding: $spacing-lg;
+
+            @include tablet-up {
+                padding: $spacing-xl;
+            }
+
+            @include desktop-up {
+                padding: $spacing-xl;
+            }
+        }
+    }
+
+    .ant-btn {
+        @include button-base;
+        min-width: auto;
+        color: $gray-800;
+
+        .btn-text {
+            color: inherit;
+        }
+
+        &.ant-btn-primary {
+            background-color: $primary-color;
+            border-color: $primary-color;
+            color: white !important;
+
+            &:hover {
+                background-color: $primary-hover;
+                border-color: $primary-hover;
+                color: white !important;
+            }
+
+            .btn-text {
+                color: white !important;
+            }
+
+            &:hover .btn-text {
+                color: white !important;
+            }
+        }
+
+        &.ant-btn-dangerous {
+            background-color: $danger-color;
+            border-color: $danger-color;
+            color: white !important;
+
+            &:hover {
+                background-color: $danger-hover;
+                border-color: $danger-hover;
+                color: white !important;
+            }
+
+            &:disabled {
+                background-color: $gray-200;
+                border-color: $gray-200;
+                color: $gray-400 !important;
+            }
+
+            .btn-text {
+                color: white !important;
+            }
+
+            &:hover .btn-text {
+                color: white !important;
+            }
+
+            &:disabled .btn-text {
+                color: $gray-400 !important;
+            }
+        }
+    }
+
+    .ant-tag {
+        border-radius: $border-radius-sm;
+        font-size: $font-size-xs;
+        font-weight: $font-weight-medium;
+        margin: 0;
+        padding: 2px $spacing;
+        line-height: 1.4;
+    }
+}
+
+// Animations
+@keyframes processing {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    50% {
+        transform: translateX(0%);
+    }
+
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+@keyframes waiting {
+    0% {
+        transform: translateX(-100%);
+        opacity: 0.5;
+    }
+
+    50% {
+        transform: translateX(0%);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateX(100%);
+        opacity: 0.5;
+    }
+}
